@@ -16,12 +16,6 @@
            - python3-mysqldb
            - php-fpm
            - php-mysql
-           - php
-           - php-gd
-           - php-cli
-           - php-common
-           - unzip
-           - phpmyadmin
     
     - name: START services
       service: name={{ item }} state=started enabled=true
@@ -70,9 +64,20 @@
   
     - name: Create DATABASE
       mysql_db: login_user=root login_password=8V2@db db=kelltondb state=present
-    
+
 
 # Set Up Phpmyadmin
+    - name: INSTALL LEMP packages
+      apt: name={{ item }} state=latest
+      with_items:
+           - php
+           - php-gd
+           - php-cli
+           - php-common
+           - unzip
+           - phpmyadmin    
+
+# Set Up Phpmyadmin link
     - name: create symbolic link /usr/share/phpmyadmin -> /var/www/html/phpmyadmin
       file:
         src: /usr/share/phpmyadmin
